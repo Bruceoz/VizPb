@@ -1,0 +1,16 @@
+{
+  "name": "vizpb",
+  "version": "1.0.0",
+  "description": "Visualize data from platsbanken",
+  "main": "app.js",
+  "scripts": {
+    "test": "console.log('Working')"
+  },
+  "author": "Bruce Anderson",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.6"
+  }
+}

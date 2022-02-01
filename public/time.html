@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    
+    <link
+
+    />
+    <script
+
+    ></script>
+    <style>
+
+    </style>
+
+    <title>Get time</title>
+  </head>
+  <body>
+    <h1>What is the current time</h1>
+
+    <p>
+      current time: <span id="clock"></span><br />
+      
+    </p>
+
+   
+    <script>
+      (function () {
+
+var clockElement = document.getElementById( "clock" );
+
+function updateClock ( clock ) {
+  //clock.innerHTML = new Date().toISOString();
+    var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+    var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, -1);
+    clock.innerHTML = localISOTime;
+  //date.toISOString()
+}
+
+setInterval(function () {
+    updateClock( clockElement );
+}, 1000);
+
+}());
+    </script>
+  </body>
+</html>
