@@ -33,6 +33,7 @@ app.post('/jobs', (request, response) => {
   let jobRegion = [];
   let jobOccField = [];
   let occupationLabel = [];
+  let municipalityLabel = [];
   getJobstream(url, api_key)
   .then(data => {
     var count = data.length;
@@ -44,21 +45,19 @@ app.post('/jobs', (request, response) => {
       jobOccField.push(data[i].occupation_field.legacy_ams_taxonomy_id)
       jobRegion.push(data[i].workplace_address.region_code);
       occupationLabel.push(data[i].occupation.label);
-      
+      municipalityLabel.push(data[i].workplace_address.municipality);
       
       } 
-      
-      
-
     };
-    //console.log(jobRegion,'\n',jobOccField);
+    console.log(municipalityLabel,'\n',jobOccField);
     //return jobRegion,jobOccField;
 
         response.json({
         status: 'success',
         jobRegion: jobRegion,
         jobOccField: jobOccField,
-        occupationLabel:occupationLabel
+        occupationLabel:occupationLabel,
+        municipalityLabel:municipalityLabel
 
     });
       

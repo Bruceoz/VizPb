@@ -1,15 +1,46 @@
 let timeNow;
 let date;
-let earlierMins = 1;
+let earlierMins = 120;
 let jocc = [];
 let jregion = [];
 let jtext = [];
+let municipalitytext = [];
 let occ = [];
 let lan = [];
 let occtext = [];
 var circles = []; // create an array to hold the DrawCircle objects
-let x, y, d, c, s, t;
+let x, y, d, c, s, t, n;
+let upSound;
+let note1, 	note2, note3, note4, note5, note6, note7, note8, note9, note10, note11, note12, note13, note14, note15, note16, note17, note18, note19, note20, note21;
+let button, button1;
+let soundOn = false;
+let showText = false;
 
+//Load the sound files
+function preload() {
+	note1 = loadSound('notes/001STHLM.mp3');
+	note2 = loadSound('notes/002VGR.mp3');
+	note3 = loadSound('notes/003SKANE.mp3');
+	note4 = loadSound('notes/004OSTERGOTLAND.mp3');
+	note5 = loadSound('notes/005UPPSALA.mp3');
+	note6 = loadSound('notes/006JONKOPING.mp3');
+	note7 = loadSound('notes/007HALLAND.mp3');
+	note8 = loadSound('notes/008OREBRO.mp3');
+	note9 = loadSound('notes/009SODERMANLAND.mp3');
+	note10 = loadSound('notes/010DALARNA.mp3');
+	note11 = loadSound('notes/011GAVLEBORG.mp3');
+	note12 = loadSound('notes/012VARMLAND.mp3');
+	note13 = loadSound('notes/013VASTMANLAND.mp3');
+	note14 = loadSound('notes/014VASTERBOTTEN.mp3');
+	note15 = loadSound('notes/015NORRBOTTEN.mp3');
+	note16 = loadSound('notes/016KALMAR.mp3');
+	note17 = loadSound('notes/017VASTERNORRLAND.mp3');
+	note18 = loadSound('notes/018KRONOBERG.mp3');
+	note19 = loadSound('notes/019BLEKINGE.mp3');
+	note20 = loadSound('notes/020JAMTLAND.mp3');
+	note21 = loadSound('notes/021GOTLAND.mp3');
+	
+  }
 
 function setup() {
 	createCanvas(windowWidth, windowHeight);
@@ -41,6 +72,7 @@ function setup() {
 		let jobOccField = json.jobOccField;
 		let jobRegion = json.jobRegion;
 		let occupationLabel = json.occupationLabel;
+		let municipalityLabel = json.municipalityLabel
 		for (let i = 0; i < json.jobOccField.length; i++){
 			jocc.push(jobOccField[i]);
 		}
@@ -50,13 +82,17 @@ function setup() {
 		for (let i = 0; i < json.occupationLabel.length; i++){
 			jtext.push(occupationLabel[i]);
 		}
-		console.log( jocc, jregion, jtext);
+		for (let i = 0; i < json.municipalityLabel.length; i++){
+			municipalitytext.push(municipalityLabel[i]);
+		}
+		//console.log( jocc, jregion, jtext);
 		// const jocc = json.jobOccField;
 		// const jregion = json.jobRegion;
 		return {
 			jocc : jocc,
 			jregion : jregion,
-			jtext : jtext
+			jtext : jtext,
+			municipalitytext : municipalitytext
 		  };			
 		};
 
@@ -71,12 +107,13 @@ function setup() {
 		  occ = (results[i].jocc);
 		  lan =( results[i].jregion);
 		  occtext = (results[i].jtext);
-		  console.log(occ,lan,occtext);
+		  municipalitytext = (results[i].municipalitytext);
+		  console.log(occ,lan,occtext,municipalitytext);
 
 		 
 		 
-		  chooseCircles(occ,lan, occtext);
-		  function chooseCircles (occ, lan, occtext){
+		  chooseCircles(occ,lan, occtext, municipalitytext);
+		  function chooseCircles (occ, lan, occtext, municipalitytext){
 		  for (let i = 0; i < occ.length; i++) {
 			//stroke(255);
 				switch (occ[i]) {
@@ -85,11 +122,13 @@ function setup() {
 						// ellipse(random(width)/2, random(height/3), lan[i] , lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#e6194B';
 						s = random(0.2, 3);
 						t = occtext[i];
-						console.log(t);
+						n = note1;
+						m = municipalitytext[i];
+						//console.log(t);
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '2':
@@ -97,10 +136,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#3cb44b';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note2;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '3':
@@ -108,10 +149,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#ffe119';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note3;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '4':
@@ -119,10 +162,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#4363d8';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note4;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '5':
@@ -130,10 +175,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#f58231';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note5;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '6':
@@ -141,10 +188,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#911eb4';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note6;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '7':
@@ -152,10 +201,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#42d4f4';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note7;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '8':
@@ -163,10 +214,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#f032e6';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note8;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '9':
@@ -174,10 +227,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#bfef45';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note9;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '10':
@@ -185,10 +240,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#fabed4';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note10;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '11':
@@ -196,10 +253,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#469990';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note11;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '12':
@@ -207,10 +266,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#dcbeff';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note12;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '13':
@@ -218,10 +279,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#e8b274';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note13;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '14':
@@ -229,10 +292,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#fffac8';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note14;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '15':
@@ -240,10 +305,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#bf8884';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note15;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '16':
@@ -251,10 +318,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#aaffc3';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note16;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '17':
@@ -262,10 +331,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#b5b526';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note17;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '18':
@@ -273,10 +344,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#ffd8b1';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note18;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '19':
@@ -284,10 +357,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#8484bd';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note19;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '20':
@@ -295,10 +370,12 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#a9a9a9';
 						s = random(0.2, 3);
 						t = occtext[i];
+						n = note20;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					break;
 					case '21':
@@ -306,29 +383,32 @@ function setup() {
 						// ellipse(random(width), random(height/3), lan[i], lan[i]);//lan[i]*2
 						x = int(random(width));
 						y = random(height/3);
-						d = lan[i]*10;
+						d =int( lan[i]);
 						c = '#515abe';
 						s = random(0.2, 3);
 						t = occtext[i];
-						
+						n = note21;
+						m = municipalitytext[i];
 						// circles[i] = new DrawCircle(x, y, d, c, s);
 					
 				}
 				//circles[i] = new DrawCircle(x, y, d, c, s);
-			console.log(s,c,t);
-					var newCircle = new DrawCircle( s, c, t);
+			//console.log(s,c,t,n,d, m);
+
+
+					var newCircle = new DrawCircle( s, c, t, n, d, m);
 					circles.push(newCircle);
 				
 
 				}
-				
+		
 			
 			} 
 			
 		
 		}
 		//console.log(occtext);	
-		console.log(circles);
+		console.log(circles.length);
 		// setInterval(() => {
 		// 		chooseCircles(occ);
 		// 	}, 2000);
@@ -339,33 +419,48 @@ function setup() {
 		lan = [];
 		jtext = [];
 		occtext = [];
+		municipalitytext = [];
 		//console.log("occ: " + occ + "lan: " + lan + "text: " + occtext);
 		//console.log("promise: " + promises);
 	  })
 	  .catch(err => console.log(err));
 
 	};
-
-	setInterval(function () {
-		Circles();
-	 }, 60000);
-
-	//Circles();
+getAudioContext().suspend();
+	// setInterval(function () {
+	// 	Circles();
+	//  }, 60000);
+	
+	Circles();
 	setInterval(triggerSend, 500);
 	
+	button = createButton('Play sound');
+ 	button.position(0, 0);
+  	button.mousePressed(toggleSound);
 	
+	button1 = createButton('Show text');
+	button1.position(100, 0);
+	button1.mousePressed(toggleText);
 
 
 }
 
 function draw() {
 	background(220);
-
-
+	
+// if (getAudioContext.state !== 'running') {
+// 		text('Click to start sound', width/2, 50);
+// 	}
+// 	else {
+// 		text('Click to mute',width/2, 50);
+// 	}
+	  
+	  text(getAudioContext().state, width/2, height/2);
 	//DrawCircle object
 		for (var i = 0; i < circles.length; i++) {
 			circles[i].move();
 			circles[i].display();
+			//circles[i].playSound();
 		}	
 
 			
@@ -380,6 +475,33 @@ function draw() {
 
 
 
+}
+// function mousePressed() {
+// 	userStartAudio();
+//   }
+//function to turn sound on or off
+function toggleSound(){
+	if (!soundOn) {
+		userStartAudio();
+		button.html('Pause sound');
+		soundOn = true;
+	}
+	else if (soundOn){
+		soundOn = false
+		button.html('Play sound');
+	}
+}
+
+//function to show or hide text
+function toggleText(){
+	if (!showText){
+		button1.html('Hide text');
+		showText = true;
+	}
+	else if (showText){
+		button1.html('Show text');
+		showText = false;
+	}
 }
 
 let other = true;
@@ -396,7 +518,8 @@ function triggerSend() {
     other = true;
   }
 }
-  
+
+
 
 function sendTextUp(){
   let availableText = [];
@@ -414,45 +537,76 @@ function sendTextUp(){
 			circles.shift();
 	}
   }
-  console.log(circles.length);
+  console.log(circles);
 }
 
 // Jitter class
 class DrawCircle {
-  constructor(s,c,t){
+  constructor(s,c,t,n,d,m){
 
     this.x = random(100, width-200);
     //starting point
     this.y = height;
     this.occtext = t;
+	this.muntext = m;
     //character size
-    this.w = 10 * this.occtext.length ;
+    this.w = 10 * (this.occtext.length + this.muntext.length) ;
     this.h = 50;
     this.speed = s;
 	this.col = c;
     this.available = true;
+	this.upSound = n;
+	this.lan = d;
+
+	
   }
 
   move() {
     //this.x += random(-this.speed, this.speed);
-    this.y += random(-this.speed, this.speed);
+    this.y += random(-this.speed, this.speed*2);
     if(!this.available){
-      this.y -= 2;
+      this.y -= random(2,5);
       if(this.y < 10){
         this.x = random(100, width-150);
         this.y = height;
         this.available = true;
+		if (soundOn){
+			this.upSound.play();
+		}
+		else {
+			this.upSound.pause();
+		}
+		console.log(this.speed);
       }
     }
   }
   display() {
     //x,y,w,h,rounded corner
-	fill(this.col);
-    rect(this.x, this.y, this.w, this.h, this.y);
+	let fillColor = color(this.col);
+	fillColor.setAlpha(150);
+	fill(fillColor);
+	if (this.lan >= 1 && this.lan <= 4) {
+		circle(this.x, this.y, this.w, this.h, this.y);
+	  }
+	else if (this.lan >= 5 && this.lan <= 13){
+		ellipse(this.x, this.y, this.w, this.h, this.y);
+	  }
+	else {
+		rect(this.x, this.y, this.w, this.h);//, this.y
+	}
+	
+	//ellipse(this.x, this.y, this.w, this.h, this.y);
+    //rect(this.x, this.y, this.w, this.h, this.y);
 	fill(51);
-    text(this.occtext, this.x + this.w/5, this.y + this.h/1.5);
+    if (showText){
+		text(this.occtext + ' i ' + this.muntext, this.x + this.w/5, this.y + this.h/1.5);
+	}
   }
+
+
+
   go(){
-    this.available = false;   
+    this.available = false;  
+	 
   }
 }
