@@ -18,12 +18,12 @@ let showText = false;
 
 //Load the sound files
 function preload() {
-	note1 = loadSound('notes/001STHLM.mp3');
-	note2 = loadSound('notes/002VGR.mp3');
-	note3 = loadSound('notes/003SKANE.mp3');
-	note4 = loadSound('notes/004OSTERGOTLAND.mp3');
-	note5 = loadSound('notes/005UPPSALA.mp3');
-	note6 = loadSound('notes/006JONKOPING.mp3');
+	note1 = loadSound('notes/Synth/0.mp3');
+	note2 = loadSound('notes/Synth/1.mp3');
+	note3 = loadSound('notes/Synth/2.mp3');
+	note4 = loadSound('notes/Synth/3.mp3');
+	note5 = loadSound('notes/Synth/4.mp3');
+	note6 = loadSound('notes/Synth/5.mp3');
 	note7 = loadSound('notes/007HALLAND.mp3');
 	note8 = loadSound('notes/008OREBRO.mp3');
 	note9 = loadSound('notes/009SODERMANLAND.mp3');
@@ -448,14 +448,8 @@ getAudioContext().suspend();
 function draw() {
 	background(220);
 	
-// if (getAudioContext.state !== 'running') {
-// 		text('Click to start sound', width/2, 50);
-// 	}
-// 	else {
-// 		text('Click to mute',width/2, 50);
-// 	}
 	  
-	  text(getAudioContext().state, width/2, height/2);
+	//text(getAudioContext().state, width/2, height/2);
 	//DrawCircle object
 		for (var i = 0; i < circles.length; i++) {
 			circles[i].move();
@@ -533,11 +527,11 @@ function sendTextUp(){
   if(availableText.length > 0){
     let ran = int(random(0, availableText.length));
     circles[availableText[ran]].go();
-		if (circles.length > 40) {
+		if (circles.length > 10) {
 			circles.shift();
 	}
   }
-  console.log(circles);
+  console.log(circles.length);
 }
 
 // Jitter class
@@ -576,7 +570,7 @@ class DrawCircle {
 		else {
 			this.upSound.pause();
 		}
-		console.log(this.speed);
+		//console.log(this.speed);
       }
     }
   }
