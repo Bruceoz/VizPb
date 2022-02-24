@@ -580,21 +580,39 @@ class DrawCircle {
 	fillColor.setAlpha(150);
 	fill(fillColor);
 	if (this.lan >= 1 && this.lan <= 4) {
-		circle(this.x, this.y, this.w, this.h, this.y);
+		circle(this.x, this.y, this.w / 2, this.h, this.y);
+		
+		if (showText){
+			fill(51);
+			textAlign(CENTER);
+			text(this.occtext + '\n'  + this.muntext, this.x , this.y );//+ this.h/1.5
+		}
 	  }
 	else if (this.lan >= 5 && this.lan <= 13){
 		ellipse(this.x, this.y, this.w, this.h, this.y);
+			if (showText){
+				fill(51);
+				textAlign(CENTER);
+				text(this.occtext + '\n'  + this.muntext, this.x , this.y );//+ this.h/1.5
+			}
+		//triangle(this.x, this.y, this.w, this.h, this.y,this.w);
 	  }
+	// else if (this.lan >= 19 && this.lan <= 21){
+	// 	//ellipse(this.x, this.y, this.w, this.h, this.y);
+	// 	triangle(this.h, this.w, this.h*2, this.w*2, random(width), random(height)); 
+	// }
 	else {
 		rect(this.x, this.y, this.w, this.h);//, this.y
+			if (showText){
+				fill(51);
+				textAlign(CENTER);
+				text(this.occtext + '\n'  + this.muntext, this.x  + this.w/2, this.y + this.h/2);//+ this.h/1.5
+			}
 	}
 	
 	//ellipse(this.x, this.y, this.w, this.h, this.y);
     //rect(this.x, this.y, this.w, this.h, this.y);
-	fill(51);
-    if (showText){
-		text(this.occtext + ' i ' + this.muntext, this.x + this.w/5, this.y + this.h/1.5);
-	}
+	
   }
 
 
