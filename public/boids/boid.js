@@ -16,13 +16,17 @@ class Boid {
     this.maxForce = 1;
     this.maxSpeed = 4; 
     for (let i = 0; i < occs.length; i++){
+        r = floor(map(occs[i],0,21,0,255)); 
+        g = floor(map(occs[i],0,21,0,255)); 
+        b = floor(map(occs[i],0,21,0,255)); 
         c = floor(map(occs[i],0,21,0,255)); 
-        console.log(c);
-       this.col = color(c, floor(random(255)), floor(random(255)), 255 ); 
+      
+       this.col = color(c, floor(random(255)), floor(random(255)), 255 );
+       //this.col = color(r, g, b, 255 );  
     }
-     
+    console.log(this.col);
     
-    console.log(this.col)
+    
   //   this.col = function chooseColor() {
   //     for (let i = 0; i < occs.length; i++){
         
@@ -90,8 +94,16 @@ class Boid {
         other.position.x,
         other.position.y
       );
+      for (let other of boids){
+        if (this.col = other.col) {
+          var stickTogether = 10
+        } else {
+          stickTogether = 0
+        }
+      };
+      //console.log('This ' + this.col + ' Other ' + other.col)
       if (other != this && d < perceptionRadius) {
-        let diff = p5.Vector.sub(this.position, other.position);
+        let diff = p5.Vector.sub(this.position, other.position + (50 * stickTogether));
         diff.div(d * d);
         steering.add(diff);
         total++;
@@ -107,7 +119,7 @@ class Boid {
   }
 
   cohesion(boids) {
-    let perceptionRadius = 100;
+    let perceptionRadius = 50;
     let steering = createVector();
     let total = 0;
     for (let other of boids) {

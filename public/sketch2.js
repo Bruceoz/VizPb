@@ -1,20 +1,31 @@
+//import { text } from "express";
+
+//const createApplication = require("express/lib/express");
+
 let timeNow;
 let date;
-let earlierMins = 120;
+let earlierMins = 30;
+let earlierHrs = 0;
 let jocc = [];
 let jregion = [];
 let jtext = [];
 let municipalitytext = [];
+let webUrl = [];
 let occ = [];
 let lan = [];
 let occtext = [];
+let platsUrl = [];
 var circles = []; // create an array to hold the DrawCircle objects
-let x, y, d, c, s, t, n;
+let x, y, d, c, s, t, n, m, u;
 let upSound;
-let note1, 	note2, note3, note4, note5, note6, note7, note8, note9, note10, note11, note12, note13, note14, note15, note16, note17, note18, note19, note20, note21;
+let note1, note2, note3, note4, note5, note6, note7, note8, note9, note10, note11, note12, note13, note14, note15, note16, note17, note18, note19, note20, note21;
 let button, button1;
 let soundOn = false;
 let showText = false;
+var statement =[0,0,0];
+var jobList = [];
+let totalCount = 0;
+let count;
 
 //Load the sound files
 function preload() {
@@ -43,13 +54,16 @@ function preload() {
   }
 
 function setup() {
-	createCanvas(windowWidth, windowHeight);
+	var myCanvas = createCanvas(windowWidth, windowHeight);
+	myCanvas.parent("canvasContainer");
 	noStroke();
 
 	async function getjobs () {
 		date = new Date();
+		date.setHours(date.getHours() - earlierHrs);
 		date.setMinutes(date.getMinutes() - earlierMins);
 		var tzoffset = (date).getTimezoneOffset() * 60000; //offset in milliseconds
+		console.log(tzoffset);
 		var localISOTime = (new Date(date - tzoffset)).toISOString().slice(0, -1);
 		timeNow =localISOTime
 		
@@ -72,7 +86,8 @@ function setup() {
 		let jobOccField = json.jobOccField;
 		let jobRegion = json.jobRegion;
 		let occupationLabel = json.occupationLabel;
-		let municipalityLabel = json.municipalityLabel
+		let municipalityLabel = json.municipalityLabel;
+		let webUrl = json.webUrl;
 		for (let i = 0; i < json.jobOccField.length; i++){
 			jocc.push(jobOccField[i]);
 		}
@@ -85,6 +100,9 @@ function setup() {
 		for (let i = 0; i < json.municipalityLabel.length; i++){
 			municipalitytext.push(municipalityLabel[i]);
 		}
+		for (let i = 0; i < json.webUrl.length; i++){
+			platsUrl.push(webUrl[i]);
+		}
 		//console.log( jocc, jregion, jtext);
 		// const jocc = json.jobOccField;
 		// const jregion = json.jobRegion;
@@ -92,7 +110,8 @@ function setup() {
 			jocc : jocc,
 			jregion : jregion,
 			jtext : jtext,
-			municipalitytext : municipalitytext
+			municipalitytext : municipalitytext,
+			platsUrl : platsUrl
 		  };			
 		};
 
@@ -108,7 +127,8 @@ function setup() {
 		  lan =( results[i].jregion);
 		  occtext = (results[i].jtext);
 		  municipalitytext = (results[i].municipalitytext);
-		  console.log(occ,lan,occtext,municipalitytext);
+		  platsUrl = (results[i].platsUrl);
+		  //console.log(occ,lan,occtext,municipalitytext,platsUrl);
 
 		 
 		 
@@ -398,7 +418,10 @@ function setup() {
 
 					var newCircle = new DrawCircle( s, c, t, n, d, m);
 					circles.push(newCircle);
-				
+					
+						
+					
+					
 
 				}
 		
@@ -407,8 +430,35 @@ function setup() {
 			
 		
 		}
+		for(i=0;i<occtext.length;i++){
+						
+			//statement[i]="<a href='google.com/"+occtext[i]+"'>"+municipalitytext[i]+"</a><br>";
+			
+			statement[i]="<a href="+platsUrl[i]+" class=list-group-item list-group-item-action target = _blank"+">"+occtext[i]+" i "+municipalitytext[i]+"</a>"
+			jobList.unshift(statement[i]);
+			
+			//document.getElementById("jobList").innerHTML+=statement[i];
+		}
+console.log(jobList);
+		for(i=0;i<jobList.length;i++){
+			//document.getElementById("jobList").innerHTML+=jobList[i];
+			document.getElementById("jobList").insertAdjacentHTML("afterbegin",jobList[i]);
+		}
+		jobList = [];
 		//console.log(occtext);	
-		console.log(circles.length);
+		// let div = createDiv(occtext.length);
+		// div.style('font-size', '16px');
+		// div.position(10, 50);
+		count = occtext.length;
+		totalCount = totalCount + occtext.length;
+		document.getElementById("count").innerHTML = "Antal annonser senaste minut: " + count;
+		document.getElementById("totCount").innerHTML = "Antal annonser totalt: " + totalCount ;
+		
+		// let div1= createDiv(count);
+		// div1.style('font-size', '16px');
+		// div1.position(10, 150);
+
+		//console.log(occtext.length);
 		// setInterval(() => {
 		// 		chooseCircles(occ);
 		// 	}, 2000);
@@ -420,60 +470,56 @@ function setup() {
 		jtext = [];
 		occtext = [];
 		municipalitytext = [];
+		platsUrl = [];
 		//console.log("occ: " + occ + "lan: " + lan + "text: " + occtext);
 		//console.log("promise: " + promises);
 	  })
 	  .catch(err => console.log(err));
 
 	};
+
 getAudioContext().suspend();
-	// setInterval(function () {
-	// 	Circles();
-	//  }, 60000);
+
+	setInterval(function () {
+		Circles();
+	 }, 60000);
 	
-	Circles();
+	//Circles();
 	setInterval(triggerSend, 500);
 	
 	button = createButton('Play sound');
- 	button.position(0, 0);
+ 	button.position(40, 10);
   	button.mousePressed(toggleSound);
 	
 	button1 = createButton('Show text');
-	button1.position(100, 0);
+	button1.position(140, 10);
 	button1.mousePressed(toggleText);
 
+
+
+//console.log(occtext+ '  ' + municipalitytext);
+
+
+  
 
 }
 
 function draw() {
 	background(220);
-	
-	  
-	//text(getAudioContext().state, width/2, height/2);
+	textSize(32);
+	fill(50);
+	text(circles.length, 40, 250);
 	//DrawCircle object
 		for (var i = 0; i < circles.length; i++) {
 			circles[i].move();
 			circles[i].display();
-			//circles[i].playSound();
 		}	
-
-			
-	
-			
-
-	
-	// keep the number of circles on the canvas under 60
-	// if (circles.length > 60) {
-	// 	circles.shift();
-	// }
-
 
 
 }
-// function mousePressed() {
-// 	userStartAudio();
-//   }
-//function to turn sound on or off
+
+
+
 function toggleSound(){
 	if (!soundOn) {
 		userStartAudio();
@@ -531,7 +577,7 @@ function sendTextUp(){
 			circles.shift();
 	}
   }
-  console.log(circles.length);
+  //console.log(circles.length);
 }
 
 // Jitter class
@@ -557,7 +603,7 @@ class DrawCircle {
 
   move() {
     //this.x += random(-this.speed, this.speed);
-    this.y += random(-this.speed, this.speed*2);
+    //this.y += random(-this.speed, this.speed*2);
     if(!this.available){
       this.y -= random(2,5);
       if(this.y < 10){
@@ -577,7 +623,7 @@ class DrawCircle {
   display() {
     //x,y,w,h,rounded corner
 	let fillColor = color(this.col);
-	fillColor.setAlpha(150);
+	fillColor.setAlpha(150 + 128 * sin(millis() / 1000));//150
 	fill(fillColor);
 	if (this.lan >= 1 && this.lan <= 4) {
 		circle(this.x, this.y, this.w / 2, this.h, this.y);
@@ -585,7 +631,9 @@ class DrawCircle {
 		if (showText){
 			fill(51);
 			textAlign(CENTER);
+			textSize(16);
 			text(this.occtext + '\n'  + this.muntext, this.x , this.y );//+ this.h/1.5
+			//createA('https://arbetsformedlingen.se/platsbanken/annonser/25711380 target=_blank',this.occtext + '\n'  + this.muntext,this.x , this.y )
 		}
 	  }
 	else if (this.lan >= 5 && this.lan <= 13){
@@ -593,6 +641,7 @@ class DrawCircle {
 			if (showText){
 				fill(51);
 				textAlign(CENTER);
+				textSize(16);
 				text(this.occtext + '\n'  + this.muntext, this.x , this.y );//+ this.h/1.5
 			}
 		//triangle(this.x, this.y, this.w, this.h, this.y,this.w);
@@ -606,12 +655,11 @@ class DrawCircle {
 			if (showText){
 				fill(51);
 				textAlign(CENTER);
+				textSize(16);
 				text(this.occtext + '\n'  + this.muntext, this.x  + this.w/2, this.y + this.h/2);//+ this.h/1.5
 			}
 	}
-	
-	//ellipse(this.x, this.y, this.w, this.h, this.y);
-    //rect(this.x, this.y, this.w, this.h, this.y);
+
 	
   }
 

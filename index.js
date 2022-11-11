@@ -34,11 +34,12 @@ app.post('/jobs', (request, response) => {
   let jobOccField = [];
   let occupationLabel = [];
   let municipalityLabel = [];
+  let webUrl = [];
   getJobstream(url, api_key)
   .then(data => {
     var count = data.length;
     //console.log(data);
-    //console.log(data[2].occupation_field.label ,'\n',data[2].workplace_address.municipality); // JSON data parsed by `data.json()` call
+    //console.log(data[2].occupation_field.label ,  ,data[2].workplace_address.municipality); // JSON data parsed by `data.json()` call
     for(var i = 0; i < data.length; i ++) {
       if (!data[i].removed && data[i].workplace_address.region) {
       //console.log(data[i].occupation_field.label,'\n',data[i].workplace_address.region, '\n' ,data[i].removed);
@@ -46,10 +47,10 @@ app.post('/jobs', (request, response) => {
       jobRegion.push(data[i].workplace_address.region_code);
       occupationLabel.push(data[i].occupation.label);
       municipalityLabel.push(data[i].workplace_address.municipality);
-      
+      webUrl.push(data[i].webpage_url);
       } 
     };
-    console.log(municipalityLabel,'\n',jobOccField);
+    console.log(municipalityLabel,'\n',jobOccField, '\n', webUrl);
     //return jobRegion,jobOccField;
 
         response.json({
@@ -57,7 +58,8 @@ app.post('/jobs', (request, response) => {
         jobRegion: jobRegion,
         jobOccField: jobOccField,
         occupationLabel:occupationLabel,
-        municipalityLabel:municipalityLabel
+        municipalityLabel:municipalityLabel,
+        webUrl:webUrl
 
     });
       
